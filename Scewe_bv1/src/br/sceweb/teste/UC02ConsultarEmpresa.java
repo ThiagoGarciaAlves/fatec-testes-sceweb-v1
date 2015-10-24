@@ -25,14 +25,17 @@ public class UC02ConsultarEmpresa {
 		empresa.setTelefone("65456546");
 	}
 
+	/**
+	 * obj - verifica o comportamento do sistema na consulta de uma empresa com sucesso
+	 */
 	@Test
 	public void test() {
-		fail("Not yet implemented");
+		empresaDAO.adiciona(empresa);
+		Empresa empresa2 = empresaDAO.consultaEmpresa(empresa.getCnpj());
+		assertTrue(empresa.equals(empresa2));
+		empresaDAO.exclui(empresa.getCnpj());
 	}
-	
-	/**
-	 * obj - exclui o cnpj ao finalizar o teste
-	 */
+
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
 		empresaDAO.exclui(empresa.getCnpj());

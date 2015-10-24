@@ -6,16 +6,20 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import br.sceweb.model.Controle;
 import br.sceweb.model.Empresa;
 import br.sceweb.model.EmpresaDAO;
 
 public class UC01CadastrarEmpresa {
+	
+	static Controle controle;
 	
 	static EmpresaDAO empresaDAO;
 	static Empresa empresa;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
+		controle = new Controle();
 		empresaDAO = new EmpresaDAO();
 		empresa = new Empresa();
 		empresa.setNomeDaEmpresa("Empresa X LTDA");
@@ -30,18 +34,18 @@ public class UC01CadastrarEmpresa {
 	 */
 	@Test
 	public void CT01UC01FBCadastra_empresa_com_sucesso() {
-		empresaDAO.exclui(empresa.getCnpj());
-		assertEquals(1, empresaDAO.adiciona(empresa));
-		empresaDAO.exclui(empresa.getCnpj());
+		controle.excluirEmpresa(empresa.getCnpj());
+		assertEquals("cadastro realizado com sucesso", controle.cadastrarEmpresa(empresa.getCnpj(), empresa.getNomeDaEmpresa(), empresa.getNomeFantasia(), empresa.getEndereco(), empresa.getTelefone()));
+		controle.excluirEmpresa(empresa.getCnpj());
 	}
 
 	/**
 	 * obj - verifica o comportamento do sistema na inclusão de uma empresa com CNPJ já cadastrado
 	 */
-	@Test(expected = RuntimeException.class)
+	@Test
 	public void CT02UC01A2Cadastra_empresa_cnpj_ja_cadastrado() {
-		empresaDAO.adiciona(empresa);
-		assertEquals(0, empresaDAO.adiciona(empresa));
+		controle.cadastrarEmpresa(empresa.getCnpj(), empresa.getNomeDaEmpresa(), empresa.getNomeFantasia(), empresa.getEndereco(), empresa.getTelefone());
+		assertNotEquals("cadastro realizado com sucesso", controle.cadastrarEmpresa(empresa.getCnpj(), empresa.getNomeDaEmpresa(), empresa.getNomeFantasia(), empresa.getEndereco(), empresa.getTelefone()));
 	}
 
 	/**
@@ -77,7 +81,7 @@ public class UC01CadastrarEmpresa {
 	 */
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
-		empresaDAO.exclui(empresa.getCnpj());
+		controle.excluirEmpresa(empresa.getCnpj());
 	}
 
 }

@@ -11,8 +11,12 @@ public class FabricaDeConexoes {
 		String url = "jdbc:mysql://localhost/sceweb";
 		try {
 			connection = DriverManager.getConnection(url, "root", "aluno");
-		} catch (SQLException e) {
-			e.printStackTrace();
+		} catch (SQLException e1) {
+			try {
+				connection = DriverManager.getConnection(url, "fatec", "fatec1010");
+			} catch (SQLException e2) {
+				e2.printStackTrace();
+			}
 		}
 		return connection;	
 	}
